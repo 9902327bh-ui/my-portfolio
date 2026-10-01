@@ -1,10 +1,11 @@
 /**
  * modal.js
  * Accessible modal controller using native <dialog> element.
- * Handles keyboard trapping, escape dismissal, backdrop click, and focus restoration.
+ * Handles keyboard focus trapping, Escape dismissal, backdrop click, and focus restoration.
  */
 
-import { projectsData } from "./data/portfolioData.js";
+import { projectsData } from "./data/projects.js";
+import { profileData } from "./data/portfolioData.js";
 
 class ProjectModal {
   constructor() {
@@ -38,7 +39,7 @@ class ProjectModal {
       this.closeBtn.addEventListener("click", () => this.close());
     }
 
-    // Close on backdrop click (click directly on dialog element)
+    // Close on backdrop click (click directly on dialog element background)
     this.dialog.addEventListener("click", (e) => {
       const rect = this.dialog.getBoundingClientRect();
       const isInDialog = (
@@ -52,10 +53,45 @@ class ProjectModal {
       }
     });
 
-    // Handle Escape key cleanly
+    // Native cancel event (triggered by Escape in dialog)
     this.dialog.addEventListener("cancel", (e) => {
       e.preventDefault();
       this.close();
+    });
+
+    // Keyboard handlers: explicit Escape key and Focus Trap
+    this.dialog.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        this.close();
+        return;
+      }
+
+      if (e.key === "Tab") {
+        const focusableElements = this.dialog.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const focusable = Array.from(focusableElements).filter(
+          el => !el.hasAttribute("disabled") && el.offsetParent !== null
+        );
+
+        if (focusable.length === 0) return;
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !this.dialog.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !this.dialog.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
     });
   }
 
@@ -91,11 +127,14 @@ class ProjectModal {
       });
     }
 
+    // Individual repo link with profile fallback
+    const fallbackGithub = (profileData && profileData.socialLinks && profileData.socialLinks.github) || "https://github.com/9902327bh-ui";
+    const repoUrl = (project.github && project.github.trim()) ? project.github.trim() : fallbackGithub;
     if (this.githubBtn) {
-      this.githubBtn.href = project.github || "https://github.com/9902327bh-ui";
+      this.githubBtn.href = repoUrl;
     }
 
-    // Open dialog
+    // Open dialog modal
     if (typeof this.dialog.showModal === "function") {
       this.dialog.showModal();
     } else {
@@ -103,9 +142,13 @@ class ProjectModal {
     }
 
     document.body.classList.add("modal-open");
-    if (this.closeBtn) {
-      this.closeBtn.focus();
-    }
+
+    // Focus close button initially
+    setTimeout(() => {
+      if (this.closeBtn) {
+        this.closeBtn.focus();
+      }
+    }, 50);
   }
 
   close() {
@@ -119,7 +162,7 @@ class ProjectModal {
 
     document.body.classList.remove("modal-open");
 
-    // Restore focus
+    // Restore focus to previously focused trigger element
     if (this.previouslyFocused && typeof this.previouslyFocused.focus === "function") {
       this.previouslyFocused.focus();
     }

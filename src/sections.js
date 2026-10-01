@@ -126,8 +126,9 @@ function renderProjects(sceneInstance) {
       </svg>
     `;
 
-    const githubLink = document.createElement("a");
-    githubLink.href = project.github;
+    const fallbackGithub = profileData.socialLinks.github || "https://github.com/9902327bh-ui";
+    const repoUrl = (project.github && project.github.trim()) ? project.github.trim() : fallbackGithub;
+    githubLink.href = repoUrl;
     githubLink.target = "_blank";
     githubLink.rel = "noopener noreferrer";
     githubLink.className = "btn btn-glass btn-sm";
