@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#72d6c9" />
+      <stop offset="50%" stop-color="#4aa3df" />
+      <stop offset="100%" stop-color="#1b4d79" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#oceanGrad)" />
+  <!-- Gentle waves -->
+  <path d="M12 36 C18 31, 26 31, 32 36 C38 41, 46 41, 52 36" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.9" />
+  <path d="M16 28 C22 23, 30 23, 36 28 C42 33, 48 33, 52 29" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.75" />
+  <!-- Small soft bubble -->
+  <circle cx="22" cy="20" r="3.5" fill="#ffffff" opacity="0.7" />
+  <circle cx="42" cy="18" r="2" fill="#ffffff" opacity="0.6" />
+</svg>

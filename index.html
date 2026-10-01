@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- SEO & Social Meta Tags -->
+  <title>Bharath M G | 3D Ocean Portfolio</title>
+  <meta name="description" content="Personal 3D interactive portfolio of Bharath M G — 2nd Year Computer Science student building ideas that connect people, hardware, and software." />
+  <meta name="author" content="Bharath M G" />
+  <meta property="og:title" content="Bharath M G | 3D Ocean Portfolio" />
+  <meta property="og:description" content="Explore interactive 3D ocean depths, IoT, Web, App Development, and AI projects by Bharath M G." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/favicon.svg" />
+  <meta name="theme-color" content="#4ecdc4" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Google Fonts: Outfit & Inter & Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Loading Screen with gentle ocean wave animation -->
+  <div id="loader" role="status" aria-live="polite">
+    <div class="loader-wave-box">
+      <div class="loader-wave"></div>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" style="position: relative; z-index: 2;">
+        <path d="M2 12c5-4 9-4 14 0s9 4 14 0" />
+      </svg>
+    </div>
+    <h2 class="loader-title">Bharath M G</h2>
+    <p class="loader-subtitle">Calibrating ocean depths & 3D reef...</p>
+  </div>
+
+  <!-- 3D Three.js WebGL Canvas behind content -->
+  <div id="canvas-container" aria-hidden="true"></div>
+
+  <!-- Vertical Depth Gauge (Desktop) -->
+  <aside class="depth-gauge" aria-label="Current ocean depth indicator">
+    <div class="depth-meter-bar">
+      <div id="depth-meter-fill" class="depth-meter-fill"></div>
+    </div>
+    <span id="depth-gauge-val" class="depth-gauge-val">0 m</span>
+  </aside>
+
+  <!-- Sticky Glass Navbar -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="#hero" class="nav-brand" aria-label="Bharath M G - Back to Surface">
+        <span class="brand-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M2 12c5-3.5 9-3.5 14 0s9 3.5 14 0" />
+          </svg>
+        </span>
+        <span>Bharath M G</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <ul class="nav-links" id="navbar-links" role="menubar">
+        <li role="none"><a href="#hero" role="menuitem">Surface</a></li>
+        <li role="none"><a href="#skills" role="menuitem">Shallows</a></li>
+        <li role="none"><a href="#projects" role="menuitem">Reef</a></li>
+        <li role="none"><a href="#timeline" role="menuitem">Deep</a></li>
+        <li role="none"><a href="#contact" role="menuitem">Seabed</a></li>
+      </ul>
+
+      <!-- Nav Actions: Depth readout & Audio Toggle -->
+      <div class="nav-actions">
+        <div class="nav-depth-badge" id="current-depth-badge" aria-live="polite">
+          <span class="pulse-dot"></span>
+          <span>SURFACE // 0 m</span>
+        </div>
+
+        <button type="button" id="audio-toggle-btn" class="audio-toggle-btn" aria-pressed="false" aria-label="Toggle ambient ocean audio">
+          <div class="audio-waves" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="audio-label">Ocean Sound</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" id="mobile-nav-toggle" class="mobile-nav-toggle" aria-expanded="false" aria-controls="navbar-links" aria-label="Toggle navigation menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Page Sections Container -->
+  <main id="app-content">
+
+    <!-- Section 1: HERO (SURFACE // 0 m) -->
+    <section id="hero" class="section hero-section" aria-labelledby="hero-name">
+      <div class="container hero-content">
+        <div class="depth-marker">SURFACE // 0 m</div>
+        <h1 id="hero-name" class="hero-name">Bharath M G</h1>
+        <p class="hero-tagline">Building ideas that connect people, hardware, and software.</p>
+        <p class="hero-subline">B.E. Computer Science · 2nd Year · Sri Venkateshwara College of Engineering · CGPA 8.6</p>
+
+        <!-- Dynamic Focus Chips -->
+        <div class="focus-chips-wrapper" id="hero-focus-chips" aria-label="Core focus areas"></div>
+
+        <!-- Action Buttons -->
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">
+            <span>Explore Projects</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+          </a>
+          <a href="#contact" class="btn btn-glass">
+            <span>Get in Touch</span>
+          </a>
+        </div>
+
+        <!-- Scroll Dive Hint -->
+        <a href="#skills" class="scroll-dive-hint" aria-label="Scroll to dive down into the shallows">
+          <div class="dive-mouse">
+            <div class="dive-wheel"></div>
+          </div>
+          <span>Scroll to Dive</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Section 2: SKILLS (SHALLOWS // 10 m) -->
+    <section id="skills" class="section" aria-labelledby="skills-heading">
+      <div class="container">
+        <header class="section-header">
+          <div class="depth-marker">SHALLOWS // 10 m</div>
+          <h2 id="skills-heading" class="section-title">Skills & Technologies</h2>
+          <p class="section-subtitle">Core programming languages, frameworks, and developer tools navigated across software and IoT prototypes.</p>
+        </header>
+
+        <div class="skills-grid" id="skills-container" role="list"></div>
+      </div>
+    </section>
+
+    <!-- Section 3: PROJECTS (REEF // 30 m) -->
+    <section id="projects" class="section" aria-labelledby="projects-heading">
+      <div class="container">
+        <header class="section-header">
+          <div class="depth-marker depth-marker-dark">REEF // 30 m</div>
+          <h2 id="projects-heading" class="section-title section-title-light">Featured Projects</h2>
+          <p class="section-subtitle section-subtitle-light">Interactive 3D buoys float in the reef above. Hover or click an orb or glass card to inspect project features.</p>
+        </header>
+
+        <div class="reef-interactive-hint" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+          </svg>
+          <span>Tip: Hover over the glowing 3D spheres in the background to inspect each project directly.</span>
+        </div>
+
+        <div class="projects-grid" id="projects-grid"></div>
+      </div>
+    </section>
+
+    <!-- Section 4: ACHIEVEMENTS & EDUCATION (DEEP // 60 m) -->
+    <section id="timeline" class="section" aria-labelledby="timeline-heading">
+      <div class="container">
+        <header class="section-header">
+          <div class="depth-marker depth-marker-dark">DEEP // 60 m</div>
+          <h2 id="timeline-heading" class="section-title section-title-light">Achievements & Education</h2>
+          <p class="section-subtitle section-subtitle-light">Academic foundations, national hackathons, debate honors, and industry skill certifications.</p>
+        </header>
+
+        <div class="timeline-container" id="timeline-container"></div>
+      </div>
+    </section>
+
+    <!-- Section 5: CONTACT (SEABED // 100 m) -->
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="container">
+        <header class="section-header">
+          <div class="depth-marker depth-marker-dark">SEABED // 100 m</div>
+          <h2 id="contact-heading" class="section-title section-title-light">Reach the Seabed</h2>
+          <p class="section-subtitle section-subtitle-light">Have an interesting opportunity, project idea, or collaboration in mind? Let's connect.</p>
+        </header>
+
+        <div class="contact-layout">
+          <!-- Contact Info Channels -->
+          <div class="glass-card contact-info-card">
+            <h3 class="contact-info-title">Let's Connect</h3>
+            <p class="contact-info-desc">Feel free to send an email, dial directly, or view ongoing open-source repositories and credentials.</p>
+
+            <div class="contact-channels">
+              <!-- Email Item with Copy Button -->
+              <div class="contact-channel-item">
+                <div class="channel-left">
+                  <div class="channel-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect width="20" height="16" x="2" y="4" rx="2"/>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">Email</div>
+                    <div class="channel-val">9902327bh@gmail.com</div>
+                  </div>
+                </div>
+                <button type="button" id="copy-email-btn" class="copy-btn" aria-label="Copy email address to clipboard">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                  </svg>
+                  <span>Copy Email</span>
+                </button>
+              </div>
+
+              <!-- Phone Item -->
+              <a href="tel:+919108942491" class="contact-channel-item">
+                <div class="channel-left">
+                  <div class="channel-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">Phone</div>
+                    <div class="channel-val">+91 9108942491</div>
+                  </div>
+                </div>
+                <span class="btn btn-glass btn-sm">Call</span>
+              </a>
+
+              <!-- GitHub Item -->
+              <a href="https://github.com/9902327bh-ui" target="_blank" rel="noopener noreferrer" class="contact-channel-item">
+                <div class="channel-left">
+                  <div class="channel-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">GitHub</div>
+                    <div class="channel-val">9902327bh-ui</div>
+                  </div>
+                </div>
+                <span class="btn btn-glass btn-sm">Visit</span>
+              </a>
+
+              <!-- LinkedIn Item -->
+              <a href="https://www.linkedin.com/in/-1229bharath" target="_blank" rel="noopener noreferrer" class="contact-channel-item">
+                <div class="channel-left">
+                  <div class="channel-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76c.86 0 1.55-.7 1.55-1.56a1.56 1.56 0 0 0-3.12 0c0 .86.7 1.56 1.57 1.56m1.39 9.74v-8.37H5.07v8.37h2.78z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">LinkedIn</div>
+                    <div class="channel-val">in/-1229bharath</div>
+                  </div>
+                </div>
+                <span class="btn btn-glass btn-sm">Connect</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Contact Form (Mailto client launcher with prefill) -->
+          <div class="glass-card contact-form-card">
+            <form id="contact-form" novalidate>
+              <div class="form-group">
+                <label for="form-name" class="form-label">Your Name</label>
+                <input type="text" id="form-name" name="name" class="form-control" placeholder="Jane Doe" required />
+              </div>
+
+              <div class="form-group">
+                <label for="form-email" class="form-label">Email Address</label>
+                <input type="email" id="form-email" name="email" class="form-control" placeholder="jane@example.com" required />
+              </div>
+
+              <div class="form-group">
+                <label for="form-subject" class="form-label">Subject</label>
+                <input type="text" id="form-subject" name="subject" class="form-control" placeholder="Collaboration / Inquiry" />
+              </div>
+
+              <div class="form-group">
+                <label for="form-message" class="form-label">Message</label>
+                <textarea id="form-message" name="message" class="form-control" placeholder="Hi Bharath, I would like to talk about..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <span>Send Message via Mail App</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+
+              <div id="form-feedback" class="form-feedback" role="alert"></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+          <div>© 2026 Bharath M G. All rights reserved.</div>
+          <a href="#hero" class="footer-back-top" aria-label="Return to surface 0m">
+            <span>Dive back to Surface // 0 m</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </a>
+        </footer>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Accessible Project Detail Modal Dialog -->
+  <dialog id="project-modal" aria-labelledby="modal-title" aria-describedby="modal-description">
+    <div class="modal-content-wrapper">
+      <button type="button" class="modal-close-btn" aria-label="Close project modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <span id="modal-depth" class="modal-depth-tag">REEF // 30 m</span>
+      <h3 id="modal-title" class="modal-title">Project Title</h3>
+      <p id="modal-subtitle" class="modal-subtitle">Project Subtitle</p>
+      
+      <p id="modal-description" class="modal-description">Project Description</p>
+
+      <div>
+        <h4 class="modal-section-title">Key Highlights & Architecture</h4>
+        <ul id="modal-features" class="modal-features-list"></ul>
+      </div>
+
+      <div>
+        <h4 class="modal-section-title">Technologies</h4>
+        <div id="modal-tech-chips" class="modal-tech-chips"></div>
+      </div>
+
+      <div class="modal-actions">
+        <a id="modal-github-link" href="https://github.com/9902327bh-ui" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>View on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Main JavaScript Entrypoint -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
